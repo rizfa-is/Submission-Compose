@@ -1,6 +1,7 @@
 package com.issog.submissioncompose.core.di
 
 import androidx.room.Room
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.issog.submissioncompose.core.data.BeritainRepository
 import com.issog.submissioncompose.core.data.source.local.ILocalDataSource
 import com.issog.submissioncompose.core.data.source.local.LocalDataSource
@@ -47,6 +48,7 @@ val networkModule = module {
                 requestBuilder.addHeader("Authorization", ComposeNativeLibs.beritainApiKey())
                 chain.proceed(requestBuilder.build())
             }
+            .addInterceptor(ChuckerInterceptor(get()))
             .readTimeout(120, TimeUnit.SECONDS)
             .writeTimeout(120, TimeUnit.SECONDS)
             .build()
