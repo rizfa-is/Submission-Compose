@@ -1,6 +1,5 @@
 package com.issog.submissioncompose.core.data.source.local
 
-import com.issog.submissioncompose.core.data.source.local.ILocalDataSource
 import com.issog.submissioncompose.core.data.source.local.room.dao.ArticleDao
 import com.issog.submissioncompose.core.data.source.local.room.entites.ArticleEntity
 import kotlinx.coroutines.Dispatchers

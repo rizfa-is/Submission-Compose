@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -43,6 +44,9 @@ android {
             version = "3.22.1"
         }
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
@@ -57,8 +61,7 @@ dependencies {
     api(libs.androidx.material3)
 
     // fragment
-    api(libs.androidx.navigation.ui)
-    api(libs.androidx.navigation.fragment)
+    api(libs.androidx.navigation.compose)
 
     // room
     api(libs.androidx.room)
@@ -73,6 +76,7 @@ dependencies {
     // koin
     api(libs.koin.core)
     api(libs.koin.android)
+    api(libs.koin.compose)
 
     //lifecycle
     api(libs.lifecycle.viewmodel.ktx)
