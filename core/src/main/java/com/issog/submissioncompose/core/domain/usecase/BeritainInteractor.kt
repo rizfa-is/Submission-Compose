@@ -33,7 +33,7 @@ class BeritainInteractor(private val repository: IBeritainRepository): BeritainU
 
     override fun getTopHeadlineByCategory(newsRequest: NewsRequest): Flow<PagingData<ArticleModel>> {
         return Pager(
-            config = PagingConfig(pageSize = 5, initialLoadSize = 10, prefetchDistance = 1, enablePlaceholders = false),
+            config = PagingConfig(pageSize = 5, initialLoadSize = 10, prefetchDistance = 2, enablePlaceholders = false),
             pagingSourceFactory = { NewsPagingSource(repository, newsRequest) }
         ).flow
     }

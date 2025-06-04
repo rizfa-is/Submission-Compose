@@ -33,8 +33,8 @@ fun BeritainTopBar(
    TopAppBar(
        title = {
            Row(
-               modifier = Modifier.fillMaxWidth(),
-               horizontalArrangement = Arrangement.Start
+               horizontalArrangement = Arrangement.Absolute.Left,
+               modifier = Modifier.fillMaxWidth()
            ) {
                Text(
                    text = "TOP NEWS",

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -19,9 +20,9 @@ import com.issog.submissioncompose.core.domain.model.SourceModel
 fun Source(
     listSource: List<SourceModel>,
     modifier: Modifier = Modifier,
-    navigateToList: (String) -> Unit
+    navigateToSource: (String) -> Unit
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(horizontal = 16.dp)) {
         Text(
             text = "Browse by Source",
             fontSize = MaterialTheme.typography.titleSmall.fontSize,
@@ -35,7 +36,7 @@ fun Source(
                 SourceItem(
                     source = source,
                     modifier = modifier.clickable {
-                        navigateToList(source.id)
+                        navigateToSource(source.id)
                     }
                 )
             }

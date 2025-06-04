@@ -84,10 +84,14 @@ dependencies {
 
     // paging
     api(libs.androidx.paging.runtime.ktx)
+    api(libs.androidx.paging.compose)
 
     // chucker
     debugImplementation(libs.chucker.debug)
     releaseImplementation(libs.chucker.release)
+
+    // coil
+    api(libs.coil.compose)
 
     testImplementation(libs.junit)
 

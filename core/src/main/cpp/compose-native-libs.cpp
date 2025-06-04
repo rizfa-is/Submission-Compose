@@ -4,7 +4,7 @@
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_issog_submissioncompose_core_utils_security_ComposeNativeLibs_beritainApiKey(JNIEnv *env, jobject thiz) {
-    std::string value = "46d324d6f5ef44c38627e29bc47740d8";
+    std::string value = "4fb12290d8fa4bc591e7f4d5b6bea037";
     return env ->NewStringUTF(value.c_str());
 }
 extern "C"
