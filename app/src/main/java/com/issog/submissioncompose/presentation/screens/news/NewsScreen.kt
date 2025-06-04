@@ -29,7 +29,8 @@ fun NewsScreen(
     category: String,
     source: String,
     modifier: Modifier = Modifier,
-    viewModel: NewsViewModel = koinViewModel<NewsViewModel>()
+    viewModel: NewsViewModel = koinViewModel<NewsViewModel>(),
+    navigateToDetail: (url: String) -> Unit
 ) {
     val query by viewModel.query
 
@@ -70,7 +71,10 @@ fun NewsScreen(
                 LazyColumn {
                     items(newsList.itemCount) { index ->
                         newsList[index]?.let { article ->
-                            NewsItem(article)
+                            NewsItem(
+                                article,
+                                navigateToDetail = navigateToDetail
+                            )
                         }
                     }
 
@@ -112,6 +116,6 @@ fun NewsLoading(modifier: Modifier = Modifier) {
 @Composable
 fun NewsScreenPreview() {
     SubmissionComposeTheme {
-        NewsScreen(category = "", source = "")
+        NewsScreen(category = "", source = "", navigateToDetail = { _ -> })
     }
 }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.withContext
 import java.io.IOException
 
@@ -46,15 +46,17 @@ class BeritainRepository(
     override fun getTopHeadlineByCategory(newsRequest: NewsRequest): Flow<Resources<List<ArticleModel>>> {
         return channelFlow {
             try {
-                remoteDataSource.getTopHeadlineByCategory(newsRequest).collectLatest { api ->
+                combine(
+                    remoteDataSource.getTopHeadlineByCategory(newsRequest),
+                    localDataSource.getFavoriteArticle()
+                ) { api, articles ->
                     when(api) {
-                        is ApiResponse.Error -> trySend(Resources.Error(api.code, api.message))
-                        is ApiResponse.Success -> {
-                            val articles = api.data.articles.mapFilterArticleData()
-                            trySend(Resources.Success(articles))
-                        }
-                        else -> trySend(Resources.NetworkError())
+                        is ApiResponse.Error -> Resources.Error(api.code, api.message)
+                        is ApiResponse.Success -> Resources.Success(api.data.articles.mapFilterArticleData(articles.mapArticleEntityToModel()))
+                        else -> Resources.NetworkError()
                     }
+                }.collectLatest { result ->
+                    trySend(result)
                 }
             } catch (e: IOException) {
                 trySend(Resources.NetworkError())
@@ -84,8 +86,7 @@ class BeritainRepository(
         localDataSource.deleteFavoriteArticle(article)
     }
 
-    private suspend fun List<TopHeadlineResponse.ArticlesItem>?.mapFilterArticleData(): List<ArticleModel> {
-        val favoriteNews = localDataSource.getFavoriteArticle().first().mapArticleEntityToModel()
+    private suspend fun List<TopHeadlineResponse.ArticlesItem>?.mapFilterArticleData(favoriteNews: List<ArticleModel>): List<ArticleModel> {
         val articleMapper = this.mapArticleResponseToModel().toMutableList()
 
         withContext(Dispatchers.Default) {

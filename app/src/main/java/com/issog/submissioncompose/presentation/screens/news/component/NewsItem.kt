@@ -1,5 +1,6 @@
 package com.issog.submissioncompose.presentation.screens.news.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,11 +33,13 @@ import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 @Composable
 fun NewsItem(
     item: ArticleModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToDetail: (url: String) -> Unit
 ) {
     Box(
         modifier = modifier
             .padding(16.dp)
+            .clickable { navigateToDetail(item.url) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -101,6 +104,6 @@ fun NewsItemPreview() {
             author = "BBC News",
             url = "https://www.bbc.com/news/entertainment_and_arts",
             favorite = false
-        ))
+        ), navigateToDetail = { _ -> })
     }
 }
