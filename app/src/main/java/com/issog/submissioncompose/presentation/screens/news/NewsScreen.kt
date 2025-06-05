@@ -73,7 +73,14 @@ fun NewsScreen(
                         newsList[index]?.let { article ->
                             NewsItem(
                                 article,
-                                navigateToDetail = navigateToDetail
+                                navigateToDetail = navigateToDetail,
+                                onFavoriteClick = { articleModel ->
+                                    if (articleModel.favorite) {
+                                        viewModel.deleteFavorite(articleModel)
+                                    } else {
+                                        viewModel.addFavorite(articleModel)
+                                    }
+                                }
                             )
                         }
                     }

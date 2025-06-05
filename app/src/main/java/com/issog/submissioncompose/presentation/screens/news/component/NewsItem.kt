@@ -1,19 +1,29 @@
 package com.issog.submissioncompose.presentation.screens.news.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,28 +44,70 @@ import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 fun NewsItem(
     item: ArticleModel,
     modifier: Modifier = Modifier,
+    onFavoriteClick: (ArticleModel) -> Unit,
     navigateToDetail: (url: String) -> Unit
 ) {
+    var isFavorite by remember { mutableStateOf(item.favorite) }
+
     Box(
         modifier = modifier
             .padding(16.dp)
-            .clickable { navigateToDetail(item.url) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AsyncImage(
-                model = item.urlToImage,
-                contentDescription = item.title,
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(id = com.issog.submissioncompose.R.drawable.ic_launcher_background),
+            // Image with favorite button overlay
+            Box(
                 modifier = Modifier
                     .size(120.dp)
-                    .clip(RoundedCornerShape(15))
-            )
+            ) {
+                // Clickable image
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    AsyncImage(
+                        model = item.urlToImage,
+                        contentDescription = item.title,
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(id = com.issog.submissioncompose.R.drawable.ic_launcher_background),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(20))
+                    )
+                }
+
+                // Favorite button
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .size(28.dp)
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(20) // 20% of the size
+                        )
+                ) {
+
+                    // Favorite button
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                        tint = Color.Red,
+                        modifier = Modifier
+                            .padding(2.dp)
+                            .fillMaxSize()
+                            .clickable {
+                                isFavorite = !isFavorite
+                                onFavoriteClick(item.copy(favorite = isFavorite))
+                            }
+                    )
+                }
+            }
             Spacer(modifier = Modifier.width(16.dp))
             Column(
-                verticalArrangement = Arrangement.SpaceAround
+                verticalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                        .clickable { navigateToDetail(item.url) }
             ) {
                 Text(
                     text = item.title,
@@ -104,6 +156,6 @@ fun NewsItemPreview() {
             author = "BBC News",
             url = "https://www.bbc.com/news/entertainment_and_arts",
             favorite = false
-        ), navigateToDetail = { _ -> })
+        ), onFavoriteClick = { _ -> }, navigateToDetail = { _ -> })
     }
 }
