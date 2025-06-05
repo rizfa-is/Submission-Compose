@@ -16,6 +16,7 @@ import com.issog.submissioncompose.core.ui.navigation.Screen
 import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 import com.issog.submissioncompose.core.utils.NavigationUtils.safeNavigate
 import com.issog.submissioncompose.presentation.screens.detail.DetailNewsScreen
+import com.issog.submissioncompose.presentation.screens.favorite.FavoriteScreen
 import com.issog.submissioncompose.presentation.screens.home.HomeScreen
 import com.issog.submissioncompose.presentation.screens.news.NewsScreen
 
@@ -49,6 +50,9 @@ fun BeritainApp(
                     navController.currentBackStackEntry?.savedStateHandle?.set("category", category)
                     navController.currentBackStackEntry?.savedStateHandle?.set("source", source)
                     navController.safeNavigate(route = Screen.NewsList.route)
+                },
+                navigateToFavorite = {
+                    navController.safeNavigate(route = Screen.Favorite.route)
                 }
             )
         }
@@ -64,12 +68,21 @@ fun BeritainApp(
                 }
             )
         }
-        // In your NavGraph.kt or wherever you define your navigation
         composable(route = Screen.DetailNews.route) {
             val url = navController.previousBackStackEntry?.savedStateHandle?.get<String>("detail_url")
             DetailNewsScreen(
                 navController = navController,
                 url = url.orEmpty()
+            )
+        }
+        composable(route = Screen.Favorite.route) {
+            FavoriteScreen(
+                navigateToDetail = { url ->
+                    if (url.isNotEmpty()) {
+                        navController.currentBackStackEntry?.savedStateHandle?.set("detail_url", url)
+                        navController.safeNavigate(route = Screen.DetailNews.route)
+                    }
+                }
             )
         }
     }

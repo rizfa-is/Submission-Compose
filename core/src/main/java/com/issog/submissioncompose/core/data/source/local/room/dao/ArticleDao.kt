@@ -17,6 +17,6 @@ interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticle(article: ArticleEntity)
 
-    @Delete
-    suspend fun deleteFavoriteArticle(articleEntity: ArticleEntity)
+    @Query("DELETE FROM article_table WHERE title = :articleTitle")
+    suspend fun deleteFavoriteArticle(articleTitle: String?)
 }

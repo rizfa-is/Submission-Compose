@@ -76,9 +76,9 @@ fun NewsScreen(
                                 navigateToDetail = navigateToDetail,
                                 onFavoriteClick = { articleModel ->
                                     if (articleModel.favorite) {
-                                        viewModel.deleteFavorite(articleModel)
-                                    } else {
                                         viewModel.addFavorite(articleModel)
+                                    } else {
+                                        viewModel.deleteFavorite(articleModel)
                                     }
                                 }
                             )

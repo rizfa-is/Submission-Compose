@@ -28,7 +28,8 @@ import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BeritainTopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToFavorite: () -> Unit
 ) {
    TopAppBar(
        title = {
@@ -52,7 +53,7 @@ fun BeritainTopBar(
        },
        actions = {
            IconButton(
-               onClick = {},
+               onClick = { navigateToFavorite() },
            ) {
                Surface(
                    shape = RoundedCornerShape(50),
@@ -78,6 +79,6 @@ fun BeritainTopBar(
 @Composable
 fun BeritainTopBarPreview() {
     SubmissionComposeTheme {
-        BeritainTopBar()
+        BeritainTopBar(navigateToFavorite = {})
     }
 }

@@ -24,14 +24,16 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel<HomeViewModel>(),
-    navigateToNewsList: (category: String, source: String) -> Unit
+    navigateToNewsList: (category: String, source: String) -> Unit,
+    navigateToFavorite: () -> Unit
 ) {
     val sourceList by viewModel.sourceList.collectAsState()
 
     HomeContent(
         state = sourceList,
         modifier = modifier,
-        navigateToNewsList = navigateToNewsList
+        navigateToNewsList = navigateToNewsList,
+        navigateToFavorite = navigateToFavorite
     )
 }
 
@@ -52,10 +54,13 @@ fun HomeLoading(modifier: Modifier) {
 fun HomeContent(
     state: UiState<List<SourceModel>>,
     modifier: Modifier,
-    navigateToNewsList: (category: String, source: String) -> Unit
+    navigateToNewsList: (category: String, source: String) -> Unit,
+    navigateToFavorite: () -> Unit
 ) {
     Column {
-        BeritainTopBar()
+        BeritainTopBar(
+            navigateToFavorite = navigateToFavorite
+        )
         when(state) {
             is UiState.Loading -> HomeLoading(modifier = modifier)
             is UiState.Success -> {
