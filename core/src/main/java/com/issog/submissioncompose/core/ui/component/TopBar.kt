@@ -1,20 +1,12 @@
-package com.issog.submissioncompose.presentation.component
+package com.issog.submissioncompose.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -28,8 +20,7 @@ import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BeritainTopBar(
-    modifier: Modifier = Modifier,
-    navigateToFavorite: () -> Unit
+    modifier: Modifier = Modifier
 ) {
    TopAppBar(
        title = {
@@ -51,26 +42,6 @@ fun BeritainTopBar(
                )
            }
        },
-       actions = {
-           IconButton(
-               onClick = { navigateToFavorite() },
-           ) {
-               Surface(
-                   shape = RoundedCornerShape(50),
-                   color = MaterialTheme.colorScheme.primary,
-                   modifier = Modifier
-                       .width(24.dp)
-                       .height(24.dp)
-               ) {
-                   Icon(
-                       imageVector = Icons.Default.Favorite,
-                       contentDescription = "Favorite",
-                       modifier = Modifier
-                           .padding(4.dp)
-                   )
-               }
-           }
-       },
        modifier = modifier
    )
 }
@@ -79,6 +50,6 @@ fun BeritainTopBar(
 @Composable
 fun BeritainTopBarPreview() {
     SubmissionComposeTheme {
-        BeritainTopBar(navigateToFavorite = {})
+        BeritainTopBar()
     }
 }

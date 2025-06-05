@@ -14,8 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.issog.submissioncompose.core.domain.model.SourceModel
+import com.issog.submissioncompose.core.ui.component.BeritainTopBar
 import com.issog.submissioncompose.core.utils.UiState
-import com.issog.submissioncompose.presentation.component.BeritainTopBar
 import com.issog.submissioncompose.presentation.screens.home.component.Category
 import com.issog.submissioncompose.presentation.screens.home.component.Source
 import org.koin.androidx.compose.koinViewModel
@@ -24,16 +24,14 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel<HomeViewModel>(),
-    navigateToNewsList: (category: String, source: String) -> Unit,
-    navigateToFavorite: () -> Unit
+    navigateToNewsList: (category: String, source: String) -> Unit
 ) {
     val sourceList by viewModel.sourceList.collectAsState()
 
     HomeContent(
         state = sourceList,
         modifier = modifier,
-        navigateToNewsList = navigateToNewsList,
-        navigateToFavorite = navigateToFavorite
+        navigateToNewsList = navigateToNewsList
     )
 }
 
@@ -54,13 +52,10 @@ fun HomeLoading(modifier: Modifier) {
 fun HomeContent(
     state: UiState<List<SourceModel>>,
     modifier: Modifier,
-    navigateToNewsList: (category: String, source: String) -> Unit,
-    navigateToFavorite: () -> Unit
+    navigateToNewsList: (category: String, source: String) -> Unit
 ) {
     Column {
-        BeritainTopBar(
-            navigateToFavorite = navigateToFavorite
-        )
+        BeritainTopBar()
         when(state) {
             is UiState.Loading -> HomeLoading(modifier = modifier)
             is UiState.Success -> {
