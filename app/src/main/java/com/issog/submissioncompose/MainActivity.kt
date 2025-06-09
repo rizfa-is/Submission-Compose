@@ -11,7 +11,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SubmissionComposeTheme {
+            SubmissionComposeTheme(
+                darkTheme = false
+            ) {
                 BeritainApp()
             }
         }
