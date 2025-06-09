@@ -5,15 +5,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.issog.submissioncompose.core.domain.model.SourceModel
+import com.issog.submissioncompose.core.ui.component.BeritainTopBar
 import com.issog.submissioncompose.core.utils.UiState
 import com.issog.submissioncompose.presentation.screens.home.component.Category
 import com.issog.submissioncompose.presentation.screens.home.component.Source
@@ -23,20 +24,15 @@ import org.koin.androidx.compose.koinViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = koinViewModel<HomeViewModel>(),
-    navigateToList: (String) -> Unit
+    navigateToNewsList: (category: String, source: String) -> Unit
 ) {
-    viewModel.sourceList.collectAsState().value.let { result ->
-        when(result) {
-            is UiState.Loading -> HomeLoading(modifier = modifier)
-            is UiState.Success -> HomeContent(
-                listSource = result.data,
-                modifier = modifier,
-                navigateToList = navigateToList
-            )
-            is UiState.Error,
-            is UiState.NetworkError -> {}
-        }
-    }
+    val sourceList by viewModel.sourceList.collectAsState()
+
+    HomeContent(
+        state = sourceList,
+        modifier = modifier,
+        navigateToNewsList = navigateToNewsList
+    )
 }
 
 @Composable
@@ -54,20 +50,30 @@ fun HomeLoading(modifier: Modifier) {
 
 @Composable
 fun HomeContent(
-    listSource: List<SourceModel>,
+    state: UiState<List<SourceModel>>,
     modifier: Modifier,
-    navigateToList: (String) -> Unit
+    navigateToNewsList: (category: String, source: String) -> Unit
 ) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-    ) {
-        Category(modifier = modifier)
-        Spacer(modifier = modifier.height(16.dp))
-        Source(
-            listSource = listSource,
-            modifier = modifier,
-            navigateToList = navigateToList
-        )
+    Column {
+        BeritainTopBar()
+        when(state) {
+            is UiState.Loading -> HomeLoading(modifier = modifier)
+            is UiState.Success -> {
+                Category(
+                    navigateToCategory = { category ->
+                        navigateToNewsList.invoke(category, "")
+                    }
+                )
+                Spacer(modifier = modifier.height(16.dp))
+                Source(
+                    listSource = state.data,
+                    navigateToSource = { source ->
+                        navigateToNewsList.invoke("", source)
+                    }
+                )
+            }
+            is UiState.Error,
+            is UiState.NetworkError -> {}
+        }
     }
 }

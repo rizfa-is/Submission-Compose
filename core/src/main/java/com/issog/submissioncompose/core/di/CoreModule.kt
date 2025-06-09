@@ -32,7 +32,7 @@ val databaseModule = module {
             BeritainDatabase::class.java,
             ComposeNativeLibs.beritainDb()
         )
-            .openHelperFactory(factory)
+//            .openHelperFactory(factory)
             .addMigrations()
             .fallbackToDestructiveMigration()
             .build()

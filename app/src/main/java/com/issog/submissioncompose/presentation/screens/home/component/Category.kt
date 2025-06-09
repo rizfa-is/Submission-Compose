@@ -1,13 +1,13 @@
 package com.issog.submissioncompose.presentation.screens.home.component
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,24 +20,26 @@ import com.issog.submissioncompose.utils.DataGenerator
 
 @Composable
 fun Category(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToCategory: (category: String) -> Unit
 ) {
     val dummyCategory = DataGenerator.generateCategoryData()
 
-    Column(modifier = modifier.verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier.padding(horizontal = 16.dp)) {
         Text(
             text = "Browse by Category",
             fontSize = MaterialTheme.typography.titleSmall.fontSize,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = modifier.height(16.dp))
-        LazyRow {
-            items(dummyCategory.size) { category ->
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            items(dummyCategory) { category ->
                 CategoryItem(
-                    dummyCategory[category],
+                    category,
                     modifier = modifier
-                        .width(100.dp)
-                        .fillMaxHeight()
+                        .clickable {
+                            navigateToCategory(category.category)
+                        }
                 )
             }
         }
@@ -48,6 +50,6 @@ fun Category(
 @Composable
 fun CategoryPreview() {
     SubmissionComposeTheme {
-        Category()
+        Category(navigateToCategory = {})
     }
 }
