@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.issog.submissioncompose.core.domain.model.ArticleModel
 import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 import com.issog.submissioncompose.presentation.screens.news.component.NewsItem
 import com.issog.submissioncompose.presentation.screens.news.component.Search
@@ -30,7 +31,7 @@ fun NewsScreen(
     source: String,
     modifier: Modifier = Modifier,
     viewModel: NewsViewModel = koinViewModel<NewsViewModel>(),
-    navigateToDetail: (url: String) -> Unit
+    navigateToDetail: (articleModel: ArticleModel) -> Unit
 ) {
     val query by viewModel.query
 

@@ -45,7 +45,7 @@ fun NewsItem(
     item: ArticleModel,
     modifier: Modifier = Modifier,
     onFavoriteClick: (ArticleModel) -> Unit,
-    navigateToDetail: (url: String) -> Unit
+    navigateToDetail: (ArticleModel) -> Unit
 ) {
     var isFavorite by remember { mutableStateOf(item.favorite) }
 
@@ -107,7 +107,7 @@ fun NewsItem(
             Column(
                 verticalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier
-                        .clickable { navigateToDetail(item.url) }
+                        .clickable { navigateToDetail(item) }
             ) {
                 Text(
                     text = item.title,

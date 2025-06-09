@@ -31,7 +31,7 @@ import org.koin.androidx.compose.koinViewModel
 fun FavoriteScreen(
     modifier: Modifier = Modifier,
     viewModel: FavoriteViewModel = koinViewModel<FavoriteViewModel>(),
-    navigateToDetail: (url: String) -> Unit
+    navigateToDetail: (ArticleModel) -> Unit
 ) {
     // Collect the flow
     val newsList by viewModel.favoriteList.collectAsState()
@@ -49,7 +49,7 @@ fun FavoriteContent(
     modifier: Modifier = Modifier,
     viewModel: FavoriteViewModel,
     newsList: UiState<List<ArticleModel>>,
-    navigateToDetail: (url: String) -> Unit
+    navigateToDetail: (ArticleModel) -> Unit
 ) {
     val query by viewModel.query
 

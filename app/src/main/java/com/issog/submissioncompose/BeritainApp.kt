@@ -23,12 +23,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.issog.submissioncompose.core.domain.model.ArticleModel
 import com.issog.submissioncompose.core.ui.component.BottomNavNoAnimation
 import com.issog.submissioncompose.core.ui.navigation.NavigationItem
 import com.issog.submissioncompose.core.ui.navigation.Screen
 import com.issog.submissioncompose.core.ui.theme.SubmissionComposeTheme
 import com.issog.submissioncompose.core.utils.NavigationUtils.safeNavigate
 import com.issog.submissioncompose.presentation.screens.detail.DetailNewsScreen
+import com.issog.submissioncompose.presentation.screens.detail.WebViewNewsScreen
 import com.issog.submissioncompose.presentation.screens.favorite.FavoriteScreen
 import com.issog.submissioncompose.presentation.screens.home.HomeScreen
 import com.issog.submissioncompose.presentation.screens.news.NewsScreen
@@ -94,17 +96,15 @@ fun BeritainApp(
                 NewsScreen(
                     category = navController.previousBackStackEntry?.savedStateHandle?.get<String>("category").toString(),
                     source = navController.previousBackStackEntry?.savedStateHandle?.get<String>("source").toString(),
-                    navigateToDetail = { url ->
-                        if (url.isNotEmpty()) {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("detail_url", url)
-                            navController.safeNavigate(route = Screen.DetailNews.route)
-                        }
+                    navigateToDetail = { article ->
+                        navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
+                        navController.safeNavigate(route = Screen.DetailNews.route)
                     }
                 )
             }
-            composable(route = Screen.DetailNews.route) {
+            composable(route = Screen.WebviewNews.route) {
                 val url = navController.previousBackStackEntry?.savedStateHandle?.get<String>("detail_url")
-                DetailNewsScreen(
+                WebViewNewsScreen(
                     navController = navController,
                     url = url.orEmpty()
                 )
@@ -118,13 +118,29 @@ fun BeritainApp(
                 ) }
             ) {
                 FavoriteScreen(
-                    navigateToDetail = { url ->
-                        if (url.isNotEmpty()) {
-                            navController.currentBackStackEntry?.savedStateHandle?.set("detail_url", url)
-                            navController.safeNavigate(route = Screen.DetailNews.route)
-                        }
+                    navigateToDetail = { article ->
+                        navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
+                        navController.safeNavigate(route = Screen.DetailNews.route)
                     }
                 )
+            }
+            composable(route = Screen.DetailNews.route) {
+                val article = navController.previousBackStackEntry?.savedStateHandle?.get<ArticleModel>("article")
+
+                if (article != null) {
+                    DetailNewsScreen(
+                        article = article,
+                        navigateBack = {
+                            navController.popBackStack()
+                        },
+                        navigateToWebView = {
+                            navController.currentBackStackEntry?.savedStateHandle?.set("detail_url",
+                                article.url
+                            )
+                            navController.safeNavigate(route = Screen.WebviewNews.route)
+                        }
+                    )
+                }
             }
             composable(route = Screen.Profile.route) {}
         }
