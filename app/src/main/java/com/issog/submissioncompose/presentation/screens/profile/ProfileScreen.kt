@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
@@ -57,6 +58,10 @@ fun ProfileScreen(
     val context = LocalContext.current
     val menuItems = listOf(
         Menu(
+            title = "rosyidrosadi15@gmail.com",
+            icon = Icons.Default.Email
+        ),
+        Menu(
             title = "Jakarta, Indonesia",
             icon = Icons.Default.LocationOn
         ),
@@ -65,12 +70,8 @@ fun ProfileScreen(
             icon = Icons.Default.Star
         ),
         Menu(
-            title = "Flutter",
+            title = "Flutter, MQL4 & MQL5",
             icon = Icons.Filled.Favorite
-        ),
-        Menu(
-            title = "MQL4 & MQL5",
-            icon = Icons.Default.Favorite
         )
     )
 
