@@ -34,6 +34,7 @@ import com.issog.submissioncompose.presentation.screens.detail.WebViewNewsScreen
 import com.issog.submissioncompose.presentation.screens.favorite.FavoriteScreen
 import com.issog.submissioncompose.presentation.screens.home.HomeScreen
 import com.issog.submissioncompose.presentation.screens.news.NewsScreen
+import com.issog.submissioncompose.presentation.screens.profile.ProfileScreen
 
 @Composable
 fun BeritainApp(
@@ -142,7 +143,16 @@ fun BeritainApp(
                     )
                 }
             }
-            composable(route = Screen.Profile.route) {}
+            composable(
+                route = Screen.Profile.route,
+                enterTransition = { return@composable fadeIn(tween(100)) },
+                exitTransition = { return@composable fadeOut(tween(1000)) },
+                popEnterTransition = { return@composable slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.End, tween(700)
+                ) }
+            ) {
+                ProfileScreen()
+            }
         }
     }
 }
