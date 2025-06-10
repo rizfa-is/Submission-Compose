@@ -10,6 +10,7 @@ import com.issog.submissioncompose.core.data.source.remote.IRemoteDataSource
 import com.issog.submissioncompose.core.data.source.remote.RemoteDataSource
 import com.issog.submissioncompose.core.data.source.remote.network.ApiService
 import com.issog.submissioncompose.core.domain.repository.IBeritainRepository
+import com.issog.submissioncompose.core.utils.db.DatabaseEncryptionHelper
 import com.issog.submissioncompose.core.utils.security.ComposeNativeLibs
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
@@ -24,15 +25,23 @@ import java.util.concurrent.TimeUnit
 val databaseModule = module {
     factory { get<BeritainDatabase>().articleDao() }
     single {
-        val passphrase = SQLiteDatabase.getBytes(ComposeNativeLibs.beritainPassphrase().toCharArray())
+        val pass = ComposeNativeLibs.beritainPassphrase()
+        val databaseName = ComposeNativeLibs.beritainDb()
+        val passphrase = SQLiteDatabase.getBytes(pass.toCharArray())
         val factory = SupportFactory(passphrase)
+
+        // Initialize SQLCipher
+        SQLiteDatabase.loadLibs(get())
+
+        // Migrate to encrypted database if needed
+        DatabaseEncryptionHelper.migrateToEncrypted(get(), databaseName, pass)
 
         Room.databaseBuilder(
             androidContext(),
             BeritainDatabase::class.java,
-            ComposeNativeLibs.beritainDb()
+            databaseName
         )
-//            .openHelperFactory(factory)
+            .openHelperFactory(factory)
             .addMigrations()
             .fallbackToDestructiveMigration()
             .build()
