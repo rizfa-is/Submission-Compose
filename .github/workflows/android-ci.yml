@@ -1,0 +1,49 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+      
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build with Gradle
+      run: ./gradlew build --no-daemon
+      
+    - name: Run unit tests
+      run: ./gradlew test
+      
+    - name: Run instrumentation tests
+      run: ./gradlew connectedAndroidTest
+      
+    - name: Run lint
+      run: ./gradlew lintDebug
+      
+    - name: Run detekt
+      run: ./gradlew detekt
+      
+  # This job will be used as a required status check
+  verify-branch-protection:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Verify branch protection
+      run: echo "All required checks passed"
